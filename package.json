@@ -1,0 +1,25 @@
+{
+  "name": "appointments",
+  "version": "1.0.0",
+  "description": "Appointments using AngularJS, NodeJS and MongoDB (Javascript Fullstack)",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.4",
+    "mongoose": "^4.1.3",
+    "node-restful": "^0.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itswadesh/simple-appointment.git"
+  },
+  "author": "Swadesh Behera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itswadesh/simple-appointment/issues"
+  },
+  "homepage": "https://github.com/itswadesh/simple-appointment#readme"
+}
