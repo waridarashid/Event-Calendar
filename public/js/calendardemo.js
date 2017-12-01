@@ -5,14 +5,10 @@ var calendarDemoApp = angular.module('calendarDemoApp', ['ui.calendar', 'ui.boot
 
 calendarDemoApp.controller('CalendarCtrl',
    function($scope, $compile, $timeout, uiCalendarConfig, $http, $uibModal, $log, $document) {
-    var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
 	var $ctrl = this;
-
+	
 	var socket = io.connect();
-	socket.on();
+	/* a broacast from the server indicates changes in database and the events are loaded */
 	socket.on('broadcast', function(message) {
         console.log('Message from server: ' + message);
 		$scope.loadEvents();
@@ -22,7 +18,7 @@ calendarDemoApp.controller('CalendarCtrl',
 	$scope.events = [];
 
 
-	/* loads all the events from database */
+	/* loads events from database */
 	$scope.loadEvents = function () {
 		$scope.events.splice(0, $scope.events.length); //without it the events are loaded twice. Fullcalendar bug
      
@@ -42,7 +38,6 @@ calendarDemoApp.controller('CalendarCtrl',
 		});
 	};
 
-    $scope.changeTo = 'Hungarian';
     /* event source that pulls from google.com */
     $scope.eventSource = {
             url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
@@ -90,47 +85,23 @@ calendarDemoApp.controller('CalendarCtrl',
 		$ctrl.items.date = date;
 		$ctrl.items.isEvent = false;
 
-    var modalInstance = $uibModal.open({
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      controllerAs: '$ctrl',
-      resolve: {
-        items: function () {
-          return $ctrl.items;
-        }
-      }
-    });
-	modalInstance.result.then(function (selectedItem) {
-		$scope.selected = selectedItem;
-		}, function () {
-			  $log.info('Modal dismissed at: ' + new Date());
-	});
-
-
+		var modalInstance = $uibModal.open({
+		  templateUrl: 'myModalContent.html',
+		  controller: 'ModalInstanceCtrl',
+		  controllerAs: '$ctrl',
+		  resolve: {
+			items: function () {
+			  return $ctrl.items;
+			}
+		  }
+		});
+		modalInstance.result.then(function (selectedItem) {
+			$scope.selected = selectedItem;
+			}, function () {
+				  $log.info('Modal dismissed at: ' + new Date());
+		});
 	};
 
-    /* alert on Resize */
-    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
-       $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
-    };
-    /* add and removes an event source of choice */
-    $scope.addRemoveEventSource = function(sources,source) {
-      var canAdd = 0;
-      angular.forEach(sources,function(value, key){
-        if(sources[key] === source){
-          sources.splice(key,1);
-          canAdd = 1;
-        }
-      });
-      if(canAdd === 0){
-        sources.push(source);
-      }
-    };
-
-    /* remove event */
-    $scope.remove = function(index) {
-      $scope.events.splice(index,1);
-    };
     /* Change View */
     $scope.changeView = function(view,calendar) {
       uiCalendarConfig.calendars[calendar].fullCalendar('changeView',view);
@@ -167,17 +138,6 @@ calendarDemoApp.controller('CalendarCtrl',
       }
     };
 
-    $scope.changeLang = function() {
-      if($scope.changeTo === 'Hungarian'){
-        $scope.uiConfig.calendar.dayNames = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
-        $scope.uiConfig.calendar.dayNamesShort = ["Vas", "Hét", "Kedd", "Sze", "Csüt", "Pén", "Szo"];
-        $scope.changeTo= 'English';
-      } else {
-        $scope.uiConfig.calendar.dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        $scope.uiConfig.calendar.dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        $scope.changeTo = 'Hungarian';
-      }
-    };
     /* event sources array*/
     $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
     $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
@@ -188,14 +148,6 @@ calendarDemoApp.controller('ModalInstanceCtrl', function ($scope, $uibModalInsta
   var $ctrl = this;
   $scope.eventName = "";
   $ctrl.items = items;
-
-  $ctrl.selected = {
-    item: $ctrl.items[0]
-  };
-  
-  $ctrl.ok = function () {
-    $uibModalInstance.close();
-  };
 
   $ctrl.cancel = function () {
     $uibModalInstance.dismiss('cancel');
