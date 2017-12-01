@@ -6,7 +6,8 @@
     "body-parser": "^1.14.2",
     "express": "^4.13.4",
     "mongoose": "^4.1.3",
-    "node-restful": "^0.2.2"
+    "node-restful": "^0.2.2",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {},
   "scripts": {
