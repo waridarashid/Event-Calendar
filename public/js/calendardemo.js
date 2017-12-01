@@ -11,13 +11,20 @@ calendarDemoApp.controller('CalendarCtrl',
     var y = date.getFullYear();
 	var $ctrl = this;
 
+	var socket = io.connect();
+	socket.on();
+	socket.on('broadcast', function(message) {
+        console.log('Message from server: ' + message);
+		$scope.loadEvents();
+    })
+
 	$ctrl.items = [];
 	$scope.events = [];
 
 
 	/* loads all the events from database */
 	$scope.loadEvents = function () {
-		$scope.events.slice(0, $scope.events.length);
+		$scope.events.splice(0, $scope.events.length); //without it the events are loaded twice. Fullcalendar bug
      
 		$http.get('/api/appointments').then(response=>{
 			appointments = response.data;
@@ -35,8 +42,6 @@ calendarDemoApp.controller('CalendarCtrl',
 		});
 	};
 
-	$scope.loadEvents();
-
     $scope.changeTo = 'Hungarian';
     /* event source that pulls from google.com */
     $scope.eventSource = {
@@ -52,6 +57,7 @@ calendarDemoApp.controller('CalendarCtrl',
       var m = new Date(start).getMonth();
       var events = [{title: 'Feed Me ' + m,start: s + (50000),end: s + (100000),allDay: false, className: ['customFeed']}];
       callback(events);
+	  $scope.loadEvents();
     };
 
 

@@ -19,6 +19,7 @@
     <script src="js/calendar.js"></script>
     <script src="js/calendarDemo.js"></script>
 
+	<script src="/socket.io/socket.io.js"></script>
 
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
@@ -33,9 +34,6 @@
 						<div class="span8">
 							<tabset>
 								<tab select="renderCalendar('myCalendar');">
-								  <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
-									<h4>{{alertMessage}}</h4>
-								  </div>
 								<div class="calendar" ng-model="eventSources" calendar="myCalendar" ui-calendar="uiConfig.calendar"></div>
 							   </tab>
 							</tabset>
@@ -49,7 +47,7 @@
 	<div class="modal-demo" ng-controller="ModalInstanceCtrl as $ctrl">
 		<script type="text/ng-template" id="myModalContent.html">
 			<div class="modal-header">
-				<h3 class="modal-title" id="modal-title" ng-show="!$ctrl.items.isEvent">{{$ctrl.items.date}}</h3>
+				<h3 class="modal-title" id="modal-title" ng-show="!$ctrl.items.isEvent">Add Event on {{$ctrl.items.date.format()}}</h3>
 				<h3 class="modal-title" id="modal-title" ng-show="$ctrl.items.isEvent">Edit Event {{$ctrl.items.thisEvent.title}}</h3>
 			</div>
 			<div class="modal-body">
@@ -62,6 +60,7 @@
 				<button class="btn btn-warning" type="button" ng-show="!$ctrl.items.isEvent"  ng-click="$ctrl.cancel()">Cancel</button>
 				<button class="btn btn-primary" type="button" ng-show="$ctrl.items.isEvent" ng-click="$ctrl.edit()">Save Changes</button>
 				<button class="btn btn-warning" type="button" ng-show="$ctrl.items.isEvent"  ng-click="$ctrl.delete()">Delete Event</button>
+				<button class="btn btn-info" type="button" ng-click="$ctrl.cancel()">Cancel</button>
 			</div>
 		</script>
 	</div>
