@@ -52,8 +52,8 @@
 			</div>
 			<div class="modal-body">
 					<h5 ng-show="$ctrl.items.isEvent">Title: {{$ctrl.items.thisEvent.title}}</h5>
-					<h5 ng-show="$ctrl.items.isEvent">Created on: {{$ctrl.items.thisEvent.created_at}}</h5>
-					<h5 ng-show="($ctrl.items.isEvent) && ($ctrl.items.thisEvent.created_at != $ctrl.items.thisEvent.updated_at)">Updated on: {{$ctrl.items.thisEvent.updated_at}}</h5>
+					<h5 ng-show="$ctrl.items.isEvent">Created on: {{$ctrl.createdOn}}</h5>
+					<h5 ng-show="($ctrl.items.isEvent) && ($ctrl.items.thisEvent.created_at != $ctrl.items.thisEvent.updated_at)">Updated on: {{$ctrl.updatedOn}}</h5>
 					<label ng-show="!$ctrl.items.isEvent">Title</label>
 					<label ng-show="$ctrl.items.isEvent">Edit Title</label>
 					<input type="text" class="form-control" ng-model="eventName" />

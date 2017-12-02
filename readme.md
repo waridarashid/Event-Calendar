@@ -1,4 +1,4 @@
-# Event Calendar: Single Page Web Application using AngularJS, NodeJS, MongoDB
+# Event Calendar
 
 ##Installation
 * Install NodeJS
@@ -10,3 +10,12 @@ Run the following commands
 npm install 
 node server
 </pre>
+Go to: http://localhost:8080/
+
+##Features:
+
+* Add event option when a day is clicked on the calendar
+* Edit and delete event options when an event is clicked
+* Load and show events on appropriate date on the calendar
+* Track create/update time
+* Real time auto-update in multiple windows

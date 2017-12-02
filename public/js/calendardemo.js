@@ -10,7 +10,6 @@ calendarDemoApp.controller('CalendarCtrl',
 	var socket = io.connect();
 	/* a broacast from the server indicates changes in database and the events are loaded */
 	socket.on('broadcast', function(message) {
-        console.log('Message from server: ' + message);
 		$scope.loadEvents();
     })
 
@@ -55,9 +54,9 @@ calendarDemoApp.controller('CalendarCtrl',
     /* alert on eventClick */
     $scope.alertOnEventClick = function( date, jsEvent, view){
         $scope.alertMessage = (date.title + ' was clicked ');
-		console.log(date);
 		$ctrl.items.isEvent = true;
 		$ctrl.items.thisEvent = date;
+		
 
 		var modalInstance = $uibModal.open({
 			templateUrl: 'myModalContent.html',
@@ -136,7 +135,6 @@ calendarDemoApp.controller('CalendarCtrl',
 
     /* event sources array*/
     $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
-    $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
 });
 
 /* EOF */
@@ -145,6 +143,15 @@ calendarDemoApp.controller('ModalInstanceCtrl', function ($scope, $uibModalInsta
   $scope.eventName = "";
   $ctrl.items = items;
 
+  /*formats date of create and update*/
+  if ($ctrl.items.isEvent) {
+	$ctrl.updatedOn = new Date ($ctrl.items.thisEvent.updated_at);
+	created = new Date ($ctrl.items.thisEvent.created_at);
+	updated = new Date ($ctrl.items.thisEvent.updated_at);
+	$ctrl.createdOn = created.getDate() + '-' + (created.getMonth()+1) + '-' + created.getFullYear();
+	$ctrl.updatedOn = updated.getDate() + '-' + (updated.getMonth()+1) + '-' + updated.getFullYear();
+  }
+
   $ctrl.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
@@ -152,8 +159,6 @@ calendarDemoApp.controller('ModalInstanceCtrl', function ($scope, $uibModalInsta
   /* functions to interact with the database on user command */
 
   $ctrl.save = function () {
-	console.log(items.date.format());
-	console.log($scope.eventName);
     $uibModalInstance.close();
 
 	var newEvent = new Object();
@@ -169,11 +174,11 @@ calendarDemoApp.controller('ModalInstanceCtrl', function ($scope, $uibModalInsta
 
     $ctrl.delete = function () {
 		$uibModalInstance.close();
-		console.log (items.thisEvent);
 		$http.delete('/api/appointments/'+items.thisEvent.id);	
     };
 
 	$ctrl.edit = function () {
+		$ctrl.updatedOn = new Date($ctrl.items.thisEvent.updated_at);
 		$uibModalInstance.close();
 		var newEvent = new Object();
 		newEvent.name = $scope.eventName;
