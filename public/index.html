@@ -48,11 +48,14 @@
 		<script type="text/ng-template" id="myModalContent.html">
 			<div class="modal-header">
 				<h3 class="modal-title" id="modal-title" ng-show="!$ctrl.items.isEvent">Add Event on {{$ctrl.items.date.format()}}</h3>
-				<h3 class="modal-title" id="modal-title" ng-show="$ctrl.items.isEvent">Edit Event {{$ctrl.items.thisEvent.title}}</h3>
+				<h3 class="modal-title" id="modal-title" ng-show="$ctrl.items.isEvent">Edit Event</h3>
 			</div>
 			<div class="modal-body">
+					<h5 ng-show="$ctrl.items.isEvent">Title: {{$ctrl.items.thisEvent.title}}</h5>
+					<h5 ng-show="$ctrl.items.isEvent">Created on: {{$ctrl.items.thisEvent.created_at}}</h5>
+					<h5 ng-show="($ctrl.items.isEvent) && ($ctrl.items.thisEvent.created_at != $ctrl.items.thisEvent.updated_at)">Updated on: {{$ctrl.items.thisEvent.updated_at}}</h5>
 					<label ng-show="!$ctrl.items.isEvent">Title</label>
-					<label ng-show="$ctrl.items.isEvent">New Title</label>
+					<label ng-show="$ctrl.items.isEvent">Edit Title</label>
 					<input type="text" class="form-control" ng-model="eventName" />
 			</div>
 			<div class="modal-footer">

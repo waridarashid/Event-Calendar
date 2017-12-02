@@ -16,6 +16,7 @@ calendarDemoApp.controller('CalendarCtrl',
 
 	$ctrl.items = [];
 	$scope.events = [];
+	$scope.eventSource = [];
 
 
 	/* loads events from database */
@@ -31,19 +32,14 @@ calendarDemoApp.controller('CalendarCtrl',
 				newEvent.title = x.name;
 				newEvent.id = x._id;
 				newEvent.allDay = false;
-				newEvent.start = new Date(x.date);
-				
+				newEvent.start = x.date;
+				newEvent.created_at = x.createdAt;
+				newEvent.updated_at = x.updatedAt;
+								
 				$scope.events.push(newEvent);
 			}
 		});
 	};
-
-    /* event source that pulls from google.com */
-    $scope.eventSource = {
-            url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-            className: 'gcal-event',           // an option!
-            currentTimezone: 'America/Chicago' // an option!
-    };
 
     /* event source that calls a function on every view switch */
     $scope.eventsF = function (start, end, timezone, callback) {
@@ -162,7 +158,6 @@ calendarDemoApp.controller('ModalInstanceCtrl', function ($scope, $uibModalInsta
 
 	var newEvent = new Object();
 	newEvent.name = $scope.eventName
-	newEvent.phone = "123";
 	newEvent.date = items.date;
 	$http.post('/api/appointments', newEvent).then(function (data){
 		console.log("stored");
@@ -180,7 +175,6 @@ calendarDemoApp.controller('ModalInstanceCtrl', function ($scope, $uibModalInsta
 
 	$ctrl.edit = function () {
 		$uibModalInstance.close();
-		console.log (items.thisEvent);
 		var newEvent = new Object();
 		newEvent.name = $scope.eventName;
 		$http.put('/api/appointments/'+ items.thisEvent.id, newEvent);

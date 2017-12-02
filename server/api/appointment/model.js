@@ -7,9 +7,8 @@ var mongoose = restful.mongoose;
 var appointmentSchema = new mongoose.Schema({
   date: Date,
   name: String,
-  phone: String,
   status: Boolean
-});
+}, { timestamps: true });
 
 // Return model
 module.exports = restful.model('Appointments', appointmentSchema);
