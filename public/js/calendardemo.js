@@ -21,8 +21,15 @@ calendarDemoApp.controller('CalendarCtrl',
 	/* loads events from database */
 	$scope.loadEvents = function () {
 		$scope.events.splice(0, $scope.events.length); //without it the events are loaded twice. Fullcalendar bug
+
+		/*fetches events only on dates displayed on the current calendar view */
+		var config = { headers:  {
+					'start': $scope.viewStart,
+					'end': $scope.viewEnd,
+					}
+		};
      
-		$http.get('/api/appointments').then(response=>{
+		$http.get('/api/appointments', config).then(response=>{
 			appointments = response.data;
 			
 			for (var i = 0; i < appointments.length; ++i) {
@@ -36,23 +43,14 @@ calendarDemoApp.controller('CalendarCtrl',
 				newEvent.updated_at = x.updatedAt;
 								
 				$scope.events.push(newEvent);
+				//console.log(x.name);
 			}
 		});
 	};
 
-    /* event source that calls a function on every view switch */
-    $scope.eventsF = function (start, end, timezone, callback) {
-      var s = new Date(start).getTime() / 1000;
-      var e = new Date(end).getTime() / 1000;
-      var m = new Date(start).getMonth();
-      var events = [{title: 'Feed Me ' + m,start: s + (50000),end: s + (100000),allDay: false, className: ['customFeed']}];
-      callback(events);
-	  $scope.loadEvents();
-    };
-
-
     /* alert on eventClick */
     $scope.alertOnEventClick = function( date, jsEvent, view){
+		console.log(date);
         $scope.alertMessage = (date.title + ' was clicked ');
 		$ctrl.items.isEvent = true;
 		$ctrl.items.thisEvent = date;
@@ -129,12 +127,18 @@ calendarDemoApp.controller('CalendarCtrl',
         eventDrop: $scope.alertOnDrop,
         eventResize: $scope.alertOnResize,
         eventRender: $scope.eventRender,
-		dayClick: $scope.alertOnDayclick
+		dayClick: $scope.alertOnDayclick,
+		viewRender: function(view, element) {
+            /*The range of dates that is displayed on a calendar view. Necessary to fetch events for only that range for efficiency*/
+			$scope.viewStart = view.start._d;
+			$scope.viewEnd = view.end._d;
+			$scope.loadEvents();
+        }
       }
     };
 
     /* event sources array*/
-    $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+    $scope.eventSources = [$scope.events];
 });
 
 /* EOF */
